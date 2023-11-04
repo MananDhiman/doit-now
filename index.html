@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DoIt - Now ToDo Manager</title>
+  </head>
+  <body>
+    <h1>DoIt - Now ToDo Manager</h1>
+    <h3>A simple task manager to help you manage your daily tasks</h3>
+
+    <form>
+      <input id="email" type="email" placeholder="abc@xyz.com" />
+      <input id="password" type="passoword" placeholder="*****" />
+      <input id="submit" type="submit" value="Login" />
+    </form>
+    <div id="ajaxMessage"></div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+      $("#submit").click(function () {
+        const user = {
+          email: $("email").val(),
+          password: $("#password").val(),
+        };
+
+        isPasswordValid(user)
+          ? makeLoginRequest(user)
+          : alert("Please check your password");
+      });
+
+      function makeLoginRequest(user) {
+        $.ajax({
+          url: "./controller/login.php",
+          type: "POST",
+          data: {
+            user,
+          },
+          success: successFun, // if page found
+          error: errorFun, // if page not found
+          complete: function (xhr, status) {
+            // runs when req complete
+            console.log("request complete");
+          },
+        });
+
+        function successFun(result) {
+          // window.location.replace("./todo-main.html");
+          window.location.replace("./controller/login.php");
+        }
+
+        function errorFun() {
+          alert("Some error occured. Please Try Again Later");
+        }
+      }
+
+      function isPasswordValid(user) {
+        if (user.password.length < 5) return false;
+        return true;
+      }
+    </script>
+  </body>
+</html>
