@@ -9,54 +9,57 @@
     <h1>DoIt - Now ToDo Manager</h1>
     <h3>A simple task manager to help you manage your daily tasks</h3>
 
-    <form>
-      <input id="email" type="email" placeholder="abc@xyz.com" />
-      <input id="password" type="passoword" placeholder="*****" />
+    <div id="message"></div>
+    <form id="login_form">
+      <input id="email" placeholder="abc@xyz.com" required />
+      <input id="password" type="password" placeholder="*****" required />
       <input id="submit" type="submit" value="Login" />
+      
     </form>
-    <div id="ajaxMessage"></div>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script>
-      $("#submit").click(function () {
+      $("#login_form").submit(function (e) {
+        e.preventDefault();
+
         const user = {
-          email: $("email").val(),
+          email: $("#email").val(),
           password: $("#password").val(),
         };
 
-        isPasswordValid(user)
-          ? makeLoginRequest(user)
-          : alert("Please check your password");
+        isFormValid(user)
+          ? handleLoginRequest(user)
+          : alert("Please Re-enter your details");
       });
 
-      function makeLoginRequest(user) {
+      function isFormValid(user) {
+        if (user.password.length < 5) return false;
+        return true;
+      }
+
+      function handleLoginRequest(user) {
         $.ajax({
           url: "./controller/login.php",
           type: "POST",
+          success: successFun,
+          error: errorFun,
           data: {
-            user,
-          },
-          success: successFun, // if page found
-          error: errorFun, // if page not found
-          complete: function (xhr, status) {
-            // runs when req complete
-            console.log("request complete");
+            email: user.email,
+            password: user.password,
           },
         });
+      }
 
-        function successFun(result) {
-          // window.location.replace("./todo-main.html");
-          window.location.replace("./controller/login.php");
-        }
-
-        function errorFun() {
-          alert("Some error occured. Please Try Again Later");
+      function successFun(result) {
+        if (result.status == true) {
+          window.location.replace("./todo-main.html");
+        } else {
+          $("#message").text("Please enter correct credentials");
         }
       }
 
-      function isPasswordValid(user) {
-        if (user.password.length < 5) return false;
-        return true;
+      function errorFun(result) {
+        console.log("Some error occured. Please Try Again Later");
       }
     </script>
   </body>

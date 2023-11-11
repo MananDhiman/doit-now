@@ -12,25 +12,27 @@
 
     
     require_once './config.php';
+    
 
     $sql = "SELECT * FROM users WHERE email='$user_email' AND password='$user_password';";
     $result = $conn->query($sql);
 
-    // if($result->num_rows > 0){
-    //   foreach($result as $row){
-    //     echo $row['password'];
-    //   }
-    // }
-
-    // to display in api
     if($result -> num_rows > 0) {
 
-      // $data = $result -> fetch_all(MYSQLI_ASSOC);
       $data = $result -> fetch_assoc();
-      echo json_encode($data);
+      $response["message"] = "Login Successfull";
+      $response["status"] = true;
+      
+      echo json_encode($response);
+
+      $cookie_name = "email";
+      $cookie_value = $data["email"];
+      setcookie($cookie_name, $cookie_value, time() + (86400 * 30), "/"); // 86400 = 1 day
+      setcookie("author_id", $data["id"], time() + (86400 * 30), "/"); // 86400 = 1 day
+
 
     } else {
-      echo json_encode(['msg' => 'No Data!', 'status' => false]);
+      echo json_encode(['msg' => 'No Data', 'status' => false]);
     } 
   }
 ?>

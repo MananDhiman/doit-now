@@ -7,5 +7,99 @@
   </head>
   <body>
     <h1>Add or remove todo</h1>
+    <h3 id="welcome"></h3>
+
+    <div id="message"></div>
+    <form id="new_todo_form">
+      <input type="text" id="todo" placeholder="buy milk" required />
+      <input id="submit" type="submit" value="Add Todo" />
+    </form>
+
+    <table id="todo_table"></table>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script>
+
+      let todoList = [];
+
+      $.ajax({
+        url: "./controller/todo.php",
+        type: "GET",
+        success: successFun,
+        error: errorFun,
+      });
+
+      function successFun(result) {
+        result.status
+          ? generateListOfHtmlObjects(result.data)
+          : $("#todo_table").html("<h3>No Data</h3>");
+      }
+
+      function errorFun(result) {
+        console.log("Some error occured. Please Try Again Later");
+      }
+
+      function generateListOfHtmlObjects(data) {
+
+        for(let i in data) {
+          todoList.push({
+            dbId: data[i].id,
+            title: data[i].title,
+            editButton: `<td><button onclick="editTodo(${data[i].id})">E</button></td>`,
+            deleteButton: `<td><button onclick="deleteTodo(${data[i].id})">D</button></td>`,
+          });
+        }
+      
+        renderTableFromTodoList();
+      }
+
+      function renderTableFromTodoList() {
+        let tableBody = "<tr><th>Todo</th></tr>";
+        for (let i in todoList) {
+          const editButton = `<td><button onclick="editTodo(${todoList[i].dbId}, ${i})">E</button></td>`;
+          const deleteButton = `<td><button onclick="deleteTodo(${todoList[i].dbId}, ${i})">D</button></td>`;
+          tableBody += `<tr><td>${todoList[i].title}</td>`;
+          tableBody += editButton;
+          tableBody += deleteButton;
+        }
+        // console.log(tableBody);
+        $("#todo_table").html(tableBody);
+      }
+
+      function editTodo(id) {
+        // set values
+        
+
+        alert("edit " + id);
+      }
+
+      function deleteTodo(dbId, id) {
+        
+        if (confirm("Sure you want to delete?")) 
+          deleteFromDb(dbId, id); 
+      }
+
+      function deleteFromDb(dbId, id) {
+        $.ajax({
+          url: "./controller/todo.php",
+          type: "DELETE",
+          data: {
+            todo_id: dbId,
+          },
+          success: successDeleteFun,
+          error: errorFun,
+        });
+
+        function successDeleteFun(result) {
+          todoList.splice(id, 1);
+          renderTableFromTodoList();  
+        }
+
+        function errorFun(result) {
+          console.log("Some error occured. Please Try Again Later");
+        }
+      }
+
+    </script>
   </body>
 </html>
