@@ -14,7 +14,13 @@
       <input id="email" placeholder="abc@xyz.com" required />
       <input id="password" type="password" placeholder="*****" required />
       <input id="submit" type="submit" value="Login" />
-      
+    </form>
+    <br>
+    <form id="register_form">
+      <input id="name" placeholder="John Appleseed" required />
+      <input id="email" placeholder="abc@xyz.com" required />
+      <input id="password" type="password" placeholder="*****" required />
+      <input id="submit" type="submit" value="Register" />
     </form>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -30,6 +36,10 @@
         isFormValid(user)
           ? handleLoginRequest(user)
           : alert("Please Re-enter your details");
+      });
+
+      $("#register_form").submit(function (e) {
+
       });
 
       function isFormValid(user) {

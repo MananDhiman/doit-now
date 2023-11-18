@@ -6,7 +6,7 @@
     <title>DoIt - Now ToDo Manager</title>
   </head>
   <body>
-    <h1>Add or remove todo</h1>
+    <h1>Add or remove todo</h1><button onclick="logout()">Logout</button>
     <h3 id="welcome"></h3>
 
     <div id="message"></div>
@@ -100,6 +100,11 @@
         }
       }
 
+      function logout() {
+        document.cookie = "email=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie = "author_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.replace("./");
+      }
     </script>
   </body>
 </html>

@@ -3,14 +3,10 @@
   $user_password = $_POST['password'];
 
   if(isset($user_email) && isset($user_password)) {
-    
-    error_reporting(E_ALL);
-    ini_set('display_errors', '1');
 
     header('Content-Type: application/json');
     header('Access-Control-Allow-Origin: *');
 
-    
     require_once './config.php';
     
 
