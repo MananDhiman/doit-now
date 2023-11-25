@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Nov 04, 2023 at 11:16 AM
+-- Generation Time: Nov 24, 2023 at 05:58 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -29,6 +29,7 @@ USE `doit-now`;
 -- Table structure for table `todos`
 --
 
+DROP TABLE IF EXISTS `todos`;
 CREATE TABLE `todos` (
   `id` int(10) UNSIGNED NOT NULL,
   `author_id` int(10) UNSIGNED NOT NULL,
@@ -41,19 +42,21 @@ CREATE TABLE `todos` (
 -- Table structure for table `users`
 --
 
+DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `email` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `name` varchar(50) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `email`, `password`) VALUES
-(1, 'admin', 'admin'),
-(2, 'user', 'user');
+INSERT INTO `users` (`id`, `email`, `password`, `name`) VALUES
+(1, 'admin', 'admin', ''),
+(2, 'user', 'user', '');
 
 --
 -- Indexes for dumped tables

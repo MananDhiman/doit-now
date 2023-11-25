@@ -17,9 +17,9 @@
     </form>
     <br>
     <form id="register_form">
-      <input id="name" placeholder="John Appleseed" required />
-      <input id="email" placeholder="abc@xyz.com" required />
-      <input id="password" type="password" placeholder="*****" required />
+      <input id="reg_name" placeholder="John Appleseed" required />
+      <input id="reg_email" placeholder="abc@xyz.com" required />
+      <input id="reg_password" type="password" placeholder="*****" required />
       <input id="submit" type="submit" value="Register" />
     </form>
 
@@ -36,9 +36,76 @@
         isFormValid(user)
           ? handleLoginRequest(user)
           : alert("Please Re-enter your details");
+
+
+        function handleLoginRequest(user) {
+          $.ajax({
+            url: "./controller/login.php",
+            type: "POST",
+            success: successFun,
+            error: errorFun,
+            data: {
+              email: user.email,
+              password: user.password,
+            },
+          });
+        }
+
+        function successFun(result) {
+          if (result.status == true) {
+            window.location.replace("./todo-main.html");
+          } else {
+            $("#message").text("Please enter correct credentials");
+          }
+        }
+
+        function errorFun(result) {
+          console.log("Some error occured. Please Try Again Later");
+        }
       });
 
       $("#register_form").submit(function (e) {
+        e.preventDefault();
+
+        const user = {
+          email: $("#reg_email").val(),
+          password: $("#reg_password").val(),
+          name: $("#reg_name").val()
+        };
+
+        // console.log(user);
+
+        isFormValid(user)
+          ? handleRegisterRequest(user)
+          : alert("Please Re-enter your details");
+
+        function handleRegisterRequest(user) {
+          $.ajax({
+            url: "./controller/login.php",
+            type: "POST",
+            success: successFun,
+            error: errorFun,
+            data: {
+              email: user.email,
+              password: user.password,
+              name: user.name
+            },
+          });
+        }
+
+        function successFun(result) {
+          if (result.status == true) {
+
+            window.location.replace("./todo-main.html");
+            console.log(result.message);
+          } else {
+            $("#message").text(result.message);
+          }
+        }
+
+        function errorFun(result) {
+          console.log("Some error occured. Please Try Again Later");
+        }
 
       });
 
@@ -47,30 +114,6 @@
         return true;
       }
 
-      function handleLoginRequest(user) {
-        $.ajax({
-          url: "./controller/login.php",
-          type: "POST",
-          success: successFun,
-          error: errorFun,
-          data: {
-            email: user.email,
-            password: user.password,
-          },
-        });
-      }
-
-      function successFun(result) {
-        if (result.status == true) {
-          window.location.replace("./todo-main.html");
-        } else {
-          $("#message").text("Please enter correct credentials");
-        }
-      }
-
-      function errorFun(result) {
-        console.log("Some error occured. Please Try Again Later");
-      }
     </script>
   </body>
 </html>
